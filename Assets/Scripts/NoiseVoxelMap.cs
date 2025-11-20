@@ -28,10 +28,15 @@ public class NoiseVoxelMap : MonoBehaviour
 
                 int h = Mathf.FloorToInt(noise * maxHeight);
 
-                if (h <= 0) continue;
+                if (h <= 0) h = 1;
 
                 for (int y = 0; y <= h; y++)
-                    Place(x, y, z, h);
+                {
+                    if (y == h)
+                        PlaceGrass(x, y, z);
+                    else
+                        Place(x, y, z);
+                }
                 if (h < waterHeight)
                 {
                     for (int y = h + 1; y <= waterHeight; y++)
@@ -44,21 +49,8 @@ public class NoiseVoxelMap : MonoBehaviour
 
         }
     }
-    private void Place(int x, int y, int z, int h)
+    private void Place(int x, int y, int z)
     {
-
-        if (y == h)
-        {
-            var go = Instantiate(grassPrefab, new Vector3(x, y, z), Quaternion.identity, transform);
-            go.name = $"B_{x}_{y},{z}";
-
-            var b = go.GetComponent<Block>() ?? go.AddComponent<Block>();
-            b.type = BlockType.Grass;
-            b.maxHP = 3;
-            b.dropCount = 1;
-            b.mineable = true;
-        }
-        else
         {
             var go = Instantiate(blockPrefab, new Vector3(x, y, z), Quaternion.identity, transform);
             go.name = $"B_{x}_{y},{z}";
@@ -70,9 +62,36 @@ public class NoiseVoxelMap : MonoBehaviour
             b.mineable = true;
         }
     }
+    private void PlaceGrass(int x, int y , int z)
+    {
+        var go = Instantiate(grassPrefab, new Vector3(x, y, z), Quaternion.identity, transform);
+        go.name = $"B_{x}_{y},{z}";
+
+        var b = go.GetComponent<Block>() ?? go.AddComponent<Block>();
+        b.type = BlockType.Grass;
+        b.maxHP = 3;
+        b.dropCount = 1;
+        b.mineable = true;
+    }
     private void PlaceWater(int x, int y, int z)
     {
         var go = Instantiate(waterPrefab, new Vector3(x, y, z), Quaternion.identity, transform);
         go.name = $"W_{x}_{y}_{z}";
+    }
+
+    public void PlaceTile(Vector3Int pos, BlockType type)
+    {
+        switch (type)
+        {
+            case BlockType.Dirt:
+                Place(pos.x, pos.y, pos.z);
+                break;
+            case BlockType.Grass:
+                PlaceGrass(pos.x, pos.y, pos.z);
+                break;            
+            case BlockType.Water:
+                PlaceWater(pos.x, pos.y, pos.z);
+                break;
+        }
     }
 }

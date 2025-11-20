@@ -21,7 +21,7 @@ public class PlayerController2 : MonoBehaviour
 
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         controller = GetComponent<CharacterController>();
         if (cam == null )
         {

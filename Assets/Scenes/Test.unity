@@ -759,7 +759,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1292,17 +1292,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6ca2b5116b33244b4d90216998a42e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dirt: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  Grass: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Water: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  dirtSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  grassSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  waterSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   Slot:
   - {fileID: 946916122}
   - {fileID: 684308309}
   - {fileID: 1642849401}
   - {fileID: 861719581}
   - {fileID: 1537830917}
-  SlotItem: {fileID: 1721647322443018648, guid: 61f6b64378afabd4489f99888e01a590,
+  slotItem: {fileID: 3924888087147131971, guid: 23c2a6fee9dfae3448ba3a784c70be77,
     type: 3}
+  selectedIndex: -1
 --- !u!114 &1830407210
 MonoBehaviour:
   m_ObjectHideFlags: 0

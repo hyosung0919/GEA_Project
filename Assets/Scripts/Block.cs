@@ -30,7 +30,6 @@ public class Block : MonoBehaviour
             if(inven != null && dropCount > 0)
                 inven.Add(type, dropCount);
 
-            InventoryUI.Instance.UpdateInventory(inven);
             Destroy(gameObject);
         }
     }
