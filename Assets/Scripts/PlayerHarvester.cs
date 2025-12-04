@@ -19,31 +19,26 @@ public class PlayerHarvester : MonoBehaviour
         if (inventory == null) inventory = gameObject.AddComponent<Inventory>();
         invenUI = FindObjectOfType<InventoryUI>();
     }
-
-    void Update()
+    public void HarvestMode(int damage)
     {
-        if (invenUI.selectedIndex < 0)
+        if (Input.GetMouseButton(0) && Time.time >= _nexHitTime)
         {
-            if (Input.GetMouseButton(0) && Time.time >= _nexHitTime)
-            {
-                _nexHitTime = Time.time + hitCooldown;
+            _nexHitTime = Time.time + hitCooldown;
 
-                Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-                if (Physics.Raycast(ray, out var hit, rayDistance, hitMask, QueryTriggerInteraction.Ignore))
+            Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(ray, out var hit, rayDistance, hitMask, QueryTriggerInteraction.Ignore))
+            {
+                var block = hit.collider.GetComponent<Block>();
+                if(block != null)
                 {
-                    var block = hit.collider.GetComponent<Block>();
-                    if (block != null)
-                    {
-                        {
-                            block.Hit(toolDamage, inventory);
-                        }
-                    }
+                    block.Hit(damage, inventory);
                 }
             }
 
         }
-        else
-        {
+    }
+    public void BuildMode()
+    {
             if (Input.GetMouseButtonDown(0))
             {
                 Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -51,15 +46,41 @@ public class PlayerHarvester : MonoBehaviour
                 {
                     Vector3Int placePos = AdjacentCellOnHitFace(hit);
 
-                    BlockType seleted = invenUI.GetInventorySlot();
+                    ItemType seleted = invenUI.GetInventorySlot();
                     if (inventory.Consume(seleted, 1))
                     {
                         FindObjectOfType<NoiseVoxelMap>().PlaceTile(placePos, seleted);
                     }
                 }
             }
-        }
+    }
 
+    void Update()
+    {
+        if (invenUI.selectedIndex < 0)
+        {
+            HarvestMode(toolDamage);
+        }
+        else
+        {
+            switch (invenUI.GetInventorySlot())
+            {
+                case ItemType.Axe:
+                    HarvestMode(2);
+                    break;
+                case ItemType.Sword:
+                    HarvestMode(0);
+                    break;
+                case ItemType.Pickaxe:
+                    HarvestMode(3);
+                    break;
+                default:
+                    BuildMode();
+                    break;
+
+            }
+        }
+    }
         static Vector3Int AdjacentCellOnHitFace(in RaycastHit hit)
         {
             Vector3 basecenter = hit.collider.transform.position;
@@ -67,4 +88,3 @@ public class PlayerHarvester : MonoBehaviour
             return Vector3Int.RoundToInt(adjCenter);
         }
     }
-}
